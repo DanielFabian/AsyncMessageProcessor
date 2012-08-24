@@ -2,18 +2,17 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{b0100ea4-5dee-41ec-9b1d-741d525151a5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>MainApplication</RootNamespace>
-    <AssemblyName>MainApplication</AssemblyName>
+    <ProjectGuid>{f2548c53-0339-4371-852c-a1411c7146bd}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UnitTests</RootNamespace>
+    <AssemblyName>UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <Name>MainApplication</Name>
+    <Name>UnitTests</Name>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,47 +20,54 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Debug\MainApplication.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\UnitTests.XML</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Release\MainApplication.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\UnitTests.XML</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
-    <Compile Include="Program.fs" />
     <None Include="packages.config" />
+    <Compile Include="FsUnitSample.fs" />
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FSharp.PowerPack">
-      <HintPath>..\packages\FSPowerPack.Community.2.1.3.1\Lib\Net40\FSharp.PowerPack.dll</HintPath>
+    <Reference Include="FsCheck">
+      <HintPath>..\packages\FsCheck.0.8.2.0\lib\net40-Client\FsCheck.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FSharp.PowerPack.Linq">
-      <HintPath>..\packages\FSPowerPack.Community.2.1.3.1\Lib\Net40\FSharp.PowerPack.Linq.dll</HintPath>
+    <Reference Include="FsCheck.Xunit">
+      <HintPath>..\packages\FsCheck.Xunit.0.2.0.0\lib\net40-Client\FsCheck.Xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FSharp.PowerPack.Metadata">
-      <HintPath>..\packages\FSPowerPack.Community.2.1.3.1\Lib\Net40\FSharp.PowerPack.Metadata.dll</HintPath>
+    <Reference Include="FsUnit.CustomMatchers">
+      <HintPath>..\packages\FsUnit.xUnit.1.1.0.1\Lib\Net40\FsUnit.CustomMatchers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FSharp.PowerPack.Parallel.Seq">
-      <HintPath>..\packages\FSPowerPack.Community.2.1.3.1\Lib\Net40\FSharp.PowerPack.Parallel.Seq.dll</HintPath>
+    <Reference Include="FsUnit.Xunit">
+      <HintPath>..\packages\FsUnit.xUnit.1.1.0.1\Lib\Net40\FsUnit.Xunit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="NHamcrest">
+      <HintPath>..\packages\FsUnit.xUnit.1.1.0.1\Lib\Net40\NHamcrest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
