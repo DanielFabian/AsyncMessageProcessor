@@ -1,4 +1,4 @@
-﻿// Learn more about F# at http://fsharp.net
+﻿open MainApplication
 open System
 open System.Reactive.Linq
 open System.Threading
@@ -26,29 +26,32 @@ type FakePipe() =
         let data = Array.zeroCreate numBytes
         random.NextBytes(data) |> ignore
         Array.Copy (data, 0, buffer, offset, numBytes) |> ignore
-        new TimeAsyncResult(TimeSpan.FromMilliseconds(random.NextDouble() * 1000.0), numBytes, userCallback) :> IAsyncResult
+        new TimeAsyncResult(TimeSpan.FromMilliseconds(random.NextDouble() * 100.0), numBytes, userCallback) :> IAsyncResult
     member x.EndRead (asyncResult : IAsyncResult) : int = 
         let timeAsyncResult = asyncResult :?> TimeAsyncResult 
         timeAsyncResult.NumBytes
 
 let asyncRead (pipe : FakePipe) buffer = 
-    Observable.FromAsyncPattern (pipe.BeginRead buffer 0 1024, pipe.EndRead)
+    Observable.FromAsyncPattern (pipe.BeginRead buffer 0 buffer.Length, pipe.EndRead)
 
 let whenRead pipe buffer = 
     Observable.Defer(asyncRead pipe buffer).Repeat()
 
-let printToScreen (buffer : byte array) numBytes =
-    printfn "%d bytes received: " numBytes
-    let string = Convert.ToBase64String (buffer, 0, numBytes)
-    printfn "%s" string
+let printToScreen (buffer : byte array) =
+    printfn "%d bytes received: " buffer.Length
+    let string = Convert.ToBase64String buffer
+    printfn "%s" string 
 
 [<EntryPoint>]
 let main args =
     printfn "Starting the trouble"
 
-    let buffer = Array.zeroCreate 1024
+    let buffer = Array.zeroCreate 100
     let pipe = FakePipe()
-    (whenRead pipe buffer).SubscribeOn(new System.Reactive.Concurrency.EventLoopScheduler()).Subscribe(printToScreen buffer) |> ignore
-
+    let messageParts = (whenRead pipe buffer).SubscribeOn(new System.Reactive.Concurrency.EventLoopScheduler()).Select(fun numBytes -> buffer.[..numBytes-1])
+    let tokenizer = Tokenizer()
+    let messages = messageParts.SelectMany(tokenizer.Tokenize)
+    messages.Subscribe(printToScreen) |> ignore
     Console.ReadKey() |> ignore
+    printfn "\nDone trouble-making"
     0
